@@ -12,9 +12,10 @@ int is_game_running = 0;
 int last_frame_time = 0;
 int ball_moving_right = -1; // 1 is moving right, -1 is moving left
 int ball_moving_up = 1; // 1 is moving up, -1 us moving down
+int ball_speed_vertical = 0;
 int platform_height = 90;
 int platform_width = 7;
-int ball_size = 15;
+int ball_size = 6;
 
 
 struct object{
@@ -155,39 +156,88 @@ void ballMovement(struct object * obj, const SDL_Rect * left, const SDL_Rect * r
     if(obj->y < 0 || obj->y > WINDOW_HEIGHT-obj->height){
         ball_moving_up *= -1;
     }
-    obj->y -= MOVE_SPEED * ball_moving_up;
+    obj->y -= ball_speed_vertical * ball_moving_up;
 
 
     if(ball_left == SDL_TRUE){
         int middle_of_ball = ball->y + (ball->h/2);
-        printf("left y1: %d\n", left->y);
-        printf("left y2: %d\n", left->y + (left->h/3));
-        printf("left y3: %d\n", left->y + ((left->h/3) * 2));
-        if(middle_of_ball >= left->y && middle_of_ball < left->y + (left->h/3)){
-            printf("left top\n");
+        int hit_point = ((left->y + left->h) - middle_of_ball) / 10;
+        printf("hit point %d\n", hit_point);
+        switch(hit_point){
+            case 1:
+                ball_speed_vertical = 4;
+                ball_moving_up = -1;
+                break;
+            case 2:
+                ball_speed_vertical = 3;
+                ball_moving_up = -1;
+                break;
+            case 3:
+                ball_speed_vertical = 2;
+                ball_moving_up = -1;
+                break;
+            case 4:
+                ball_speed_vertical = 1;
+                ball_moving_up = -1;
+                break;
+            case 5:
+                ball_speed_vertical = 1;
+                ball_moving_up = 1;
+                break;
+            case 6:
+                ball_speed_vertical = 2;
+                ball_moving_up = 1;
+                break;
+            case 7:
+                ball_speed_vertical = 3;
+                ball_moving_up = 1;
+                break;
+            case 8:
+                ball_speed_vertical = 4;
+                ball_moving_up = 1;
+                break;
         }
-        else if(middle_of_ball >= left->y + (left->h/3) && middle_of_ball < left->y + ((left->h/3) * 2) ){
-            printf("left middle\n");
-        }
-        else{
-            printf("left bottom\n");
-        }
+        printf("up speed %d\n", ball_speed_vertical);
         ball_moving_right *= -1;
     }
     if(ball_right == SDL_TRUE){
         int middle_of_ball = ball->y + (ball->h/2);
-        printf("right y1: %d\n", right->y);
-        printf("right y2: %d\n", right->y + (right->h/3));
-        printf("right y3: %d\n", right->y + ((right->h/3) * 2));
-        if(middle_of_ball >= right->y && middle_of_ball < right->y + (right->h/3)){
-            printf("right top\n");
+        int hit_point = ((right->y + right->h) - middle_of_ball) / 10;
+        switch(hit_point){
+            case 1:
+                ball_speed_vertical = 4;
+                ball_moving_up = -1;
+                break;
+            case 2:
+                ball_speed_vertical = 3;
+                ball_moving_up = -1;
+                break;
+            case 3:
+                ball_speed_vertical = 2;
+                ball_moving_up = -1;
+                break;
+            case 4:
+                ball_speed_vertical = 1;
+                ball_moving_up = -1;
+                break;
+            case 5:
+                ball_speed_vertical = 1;
+                ball_moving_up = 1;
+                break;
+            case 6:
+                ball_speed_vertical = 2;
+                ball_moving_up = 1;
+                break;
+            case 7:
+                ball_speed_vertical = 3;
+                ball_moving_up = 1;
+                break;
+            case 8:
+                ball_speed_vertical = 4;
+                ball_moving_up = 1;
+                break;
         }
-        else if(middle_of_ball >= right->y + (right->h/3) && middle_of_ball < right->y + ((right->h/3) * 2) ){
-            printf("right middle\n");
-        }
-        else{
-            printf("right bottom\n");
-        }
+        printf("up speed %d\n", ball_speed_vertical);
         ball_moving_right *= -1;
     }
 
