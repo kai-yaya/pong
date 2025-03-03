@@ -1,10 +1,9 @@
 #include <SDL.h>
 #include <stdio.h>
+#define FPS 60
 
-
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
-const int FPS = 60;
+const int WINDOW_WIDTH = 1920;
+const int WINDOW_HEIGHT = 1080;
 const float FRAME_TARGET_TIME = 1000 / FPS;
 const int MOVE_SPEED = 3;
 SDL_Window * window = NULL;
@@ -13,6 +12,9 @@ int is_game_running = 0;
 int last_frame_time = 0;
 int ball_moving_right = -1; // 1 is moving right, -1 is moving left
 int ball_moving_up = 1; // 1 is moving up, -1 us moving down
+int platform_height = 90;
+int platform_width = 7;
+int ball_size = 15;
 
 
 struct object{
@@ -54,20 +56,20 @@ int main(int argc, char * argv[]){
 
 
 void setup(void){
-    objLeft.x = 50;
-    objLeft.y = 275;
-    objLeft.height = 55;
-    objLeft.width = 5;
+    objLeft.x = WINDOW_WIDTH * 0.1;
+    objLeft.y = WINDOW_HEIGHT/2 - platform_height/2;
+    objLeft.height = platform_height;
+    objLeft.width = platform_width;
 
-    objRight.x = 720;
-    objRight.y = 275;
-    objRight.height = 55;
-    objRight.width = 5;
+    objRight.x = WINDOW_WIDTH * 0.9;
+    objRight.y = WINDOW_HEIGHT/2 - platform_height/2;
+    objRight.height = platform_height;
+    objRight.width = platform_width;
 
     objBall.x = WINDOW_WIDTH/2;
     objBall.y = WINDOW_HEIGHT/2;
-    objBall.height = 15;
-    objBall.width = 15;
+    objBall.height = ball_size;
+    objBall.width = ball_size;
 }
 
 
@@ -77,7 +79,7 @@ int init(void){
         return 0;
     }
 
-    window = SDL_CreateWindow("Pong, but worse 👉😎👈", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
+    window = SDL_CreateWindow("Pong, but worse 👉😎👈", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
     if(window == NULL){
         printf("boo womp\n%s", SDL_GetError());
         return 0;
