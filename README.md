@@ -9,6 +9,5 @@ i - up
 l - down
 
 ## Todo
-- Fatser move keys (left and right shift?)
 - scoring, and maybe faster balls with higher scoring
 - not kms-ing after forgetting () in ```obj->x += (MOVE_SPEED-1) * ball_moving_right;```
