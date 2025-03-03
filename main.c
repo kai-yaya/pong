@@ -1,18 +1,18 @@
 #include <SDL.h>
 #include <stdio.h>
-#define FPS 60
+#define FPS 90
+#define MOVE_SPEED 5
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 const float FRAME_TARGET_TIME = 1000 / FPS;
-const int MOVE_SPEED = 3;
 SDL_Window * window = NULL;
 SDL_Renderer * renderer = NULL;
 int is_game_running = 0;
 int last_frame_time = 0;
 int ball_moving_right = -1; // 1 is moving right, -1 is moving left
 int ball_moving_up = 1; // 1 is moving up, -1 us moving down
-int ball_speed_vertical = 0;
+int ball_speed_vertical = 3;
 int platform_height = 90;
 int platform_width = 7;
 int ball_size = 6;
@@ -31,8 +31,8 @@ void setup(void);
 void logic(void);
 void render(void);
 void exit(void);
-void moveUp(struct object * obj);
-void moveDown(struct object * obj);
+void moveUp(struct object * obj, int speed);
+void moveDown(struct object * obj, int speed);
 void ballMovement(struct object * obj, const SDL_Rect *, const SDL_Rect *, const SDL_Rect *);
 void resetBallPos();
 
@@ -98,7 +98,13 @@ int init(void){
 void logic(void){
     SDL_Delay(FRAME_TARGET_TIME);
     SDL_Event event;
+
+    int left_speed = MOVE_SPEED;
+    int right_speed = MOVE_SPEED;
+
     const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+
+
     while (SDL_PollEvent(&event)){
         switch (event.type){
             case SDL_QUIT:
@@ -117,31 +123,41 @@ void logic(void){
     if(keystate[SDL_SCANCODE_ESCAPE]){
         is_game_running = 0; 
     }
+
+
+    if(keystate[SDL_SCANCODE_LSHIFT]){
+        left_speed = MOVE_SPEED * 2;
+    }
+    if(keystate[SDL_SCANCODE_RSHIFT]){
+        right_speed = MOVE_SPEED * 2;
+    } 
+
+
     if(keystate[SDL_SCANCODE_W]){
-        moveUp(&objLeft);
+        moveUp(&objLeft, left_speed);
     } 
     if(keystate[SDL_SCANCODE_S]){
-        moveDown(&objLeft);
+        moveDown(&objLeft, left_speed);
     }
     if(keystate[SDL_SCANCODE_I]){
-        moveUp(&objRight);
+        moveUp(&objRight, right_speed);
     } 
     if(keystate[SDL_SCANCODE_K]){
-        moveDown(&objRight);
+        moveDown(&objRight, right_speed);
     } 
 }
 
 
-void moveUp(struct object * obj){
-    obj->y -= MOVE_SPEED;
+void moveUp(struct object * obj, int speed){
+    obj->y -= speed;
     if(obj->y < 0){
         obj->y = 0;
     }
 }
 
 
-void moveDown(struct object * obj){
-    obj->y += MOVE_SPEED;
+void moveDown(struct object * obj, int speed){
+    obj->y += speed;
     if(obj->y > WINDOW_HEIGHT-obj->height){
         obj->y = WINDOW_HEIGHT-obj->height;
     }
@@ -151,7 +167,6 @@ void moveDown(struct object * obj){
 void ballMovement(struct object * obj, const SDL_Rect * left, const SDL_Rect * right, const SDL_Rect * ball){
     SDL_bool ball_left = SDL_HasIntersection(ball, left);
     SDL_bool ball_right = SDL_HasIntersection(ball, right);
-    
 
     if(obj->y < 0 || obj->y > WINDOW_HEIGHT-obj->height){
         ball_moving_up *= -1;
