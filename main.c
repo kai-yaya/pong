@@ -2,8 +2,8 @@
 #include <stdio.h>
 #define FPS 60
 
-const int WINDOW_WIDTH = 1920;
-const int WINDOW_HEIGHT = 1080;
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 600;
 const float FRAME_TARGET_TIME = 1000 / FPS;
 const int MOVE_SPEED = 3;
 SDL_Window * window = NULL;
@@ -79,7 +79,7 @@ int init(void){
         return 0;
     }
 
-    window = SDL_CreateWindow("Pong, but worse 👉😎👈", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    window = SDL_CreateWindow("Pong, but worse 👉😎👈", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
     if(window == NULL){
         printf("boo womp\n%s", SDL_GetError());
         return 0;
@@ -148,8 +148,8 @@ void moveDown(struct object * obj){
 
 
 void ballMovement(struct object * obj, const SDL_Rect * left, const SDL_Rect * right, const SDL_Rect * ball){
-    SDL_bool ball_left = SDL_HasIntersection(ball, right);
-    SDL_bool ball_right = SDL_HasIntersection(ball, left);
+    SDL_bool ball_left = SDL_HasIntersection(ball, left);
+    SDL_bool ball_right = SDL_HasIntersection(ball, right);
     
 
     if(obj->y < 0 || obj->y > WINDOW_HEIGHT-obj->height){
@@ -159,11 +159,35 @@ void ballMovement(struct object * obj, const SDL_Rect * left, const SDL_Rect * r
 
 
     if(ball_left == SDL_TRUE){
-        printf("%d\n", ball_moving_right);
+        int middle_of_ball = ball->y + (ball->h/2);
+        printf("left y1: %d\n", left->y);
+        printf("left y2: %d\n", left->y + (left->h/3));
+        printf("left y3: %d\n", left->y + ((left->h/3) * 2));
+        if(middle_of_ball >= left->y && middle_of_ball < left->y + (left->h/3)){
+            printf("left top\n");
+        }
+        else if(middle_of_ball >= left->y + (left->h/3) && middle_of_ball < left->y + ((left->h/3) * 2) ){
+            printf("left middle\n");
+        }
+        else{
+            printf("left bottom\n");
+        }
         ball_moving_right *= -1;
     }
     if(ball_right == SDL_TRUE){
-        printf("%d\n", ball_moving_right);
+        int middle_of_ball = ball->y + (ball->h/2);
+        printf("right y1: %d\n", right->y);
+        printf("right y2: %d\n", right->y + (right->h/3));
+        printf("right y3: %d\n", right->y + ((right->h/3) * 2));
+        if(middle_of_ball >= right->y && middle_of_ball < right->y + (right->h/3)){
+            printf("right top\n");
+        }
+        else if(middle_of_ball >= right->y + (right->h/3) && middle_of_ball < right->y + ((right->h/3) * 2) ){
+            printf("right middle\n");
+        }
+        else{
+            printf("right bottom\n");
+        }
         ball_moving_right *= -1;
     }
 
