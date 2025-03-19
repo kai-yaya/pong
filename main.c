@@ -30,7 +30,7 @@ int init(void);
 void setup(void);
 void logic(void);
 void render(void);
-void exit(void);
+void gameExit(void);
 void moveUp(struct object * obj, int speed);
 void moveDown(struct object * obj, int speed);
 void ballMovement(struct object * obj, const SDL_Rect *, const SDL_Rect *, const SDL_Rect *);
@@ -50,7 +50,7 @@ int main(int argc, char * argv[]){
         render();
     }
 
-    exit();
+    gameExit();
 
     return 0;
 }
@@ -310,7 +310,7 @@ void render(void){
 }
 
 
-void exit(void){
+void gameExit(void){
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
